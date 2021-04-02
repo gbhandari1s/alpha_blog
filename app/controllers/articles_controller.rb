@@ -1,4 +1,5 @@
 class ArticlesController < ApplicationController
+
     def show
         @article = Article.find(params[:id])
     end
@@ -61,6 +62,12 @@ class ArticlesController < ApplicationController
 
         redirect_to articles_path
 
+    end
+
+    private
+
+    def set_article
+        @article = Article.find(params[:id])
     end
 
 
