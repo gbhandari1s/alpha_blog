@@ -1,7 +1,10 @@
 class ArticlesController < ApplicationController
 
+    #passing this method as a symbol to this helper for destroy, update,edit & show
+    before_action :set_article, only: [:show, :edit, :update, :destroy]
+
     def show
-        @article = Article.find(params[:id])
+
     end
 
     def index
@@ -18,13 +21,12 @@ class ArticlesController < ApplicationController
 
     def edit
 
-        @article = Article.find(params[:id])
 
     end
 
 
     def create
-        @article = Article.new(params.require(:article).permit(:title, :description))
+        @article = Article.new(article_params)
         if @article.save
 
             #redirect_to @article ; rails provides this shortcut to us.
@@ -38,8 +40,8 @@ class ArticlesController < ApplicationController
     end
 
     def update
-        @article = Article.find(params[:id])
-        if @article.update(params.require(:article).permit(:title, :description))
+
+        if @article.update(article_params)
 
             flash[:notice] = "Article was updated successfully"
             redirect_to article_path(@article)
@@ -57,7 +59,6 @@ class ArticlesController < ApplicationController
 
     def destroy
 
-        @article = Article.find(params[:id])
         @article.destroy
 
         redirect_to articles_path
@@ -67,7 +68,13 @@ class ArticlesController < ApplicationController
     private
 
     def set_article
+        #used by destroy, update, edit, 
         @article = Article.find(params[:id])
+    end
+
+    def article_params
+        #required for create and update actions; whitelisting the params passed from the web.
+        params.require(:article).permit(:title, :description)
     end
 
 
